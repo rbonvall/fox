@@ -10,7 +10,7 @@ struct grid_info {
     MPI_Comm grid_comm;
     MPI_Comm row_comm;
     MPI_Comm col_comm;
-    int      q;
+    int      ppside;
     int      my_row, my_col, my_rank;
 };
 
@@ -43,20 +43,20 @@ void Fox(struct grid_info *grid, int n,
     int bcast_root;
     MPI_Status status;
 
-    int n_bar = n / grid->q;
+    int n_bar = n / grid->ppside;
 
     int i, j;
     for (i = 0; i < n; ++i)
         for (j = 0; j < n; ++j)
             local_C[i][j] = 0;
 
-    int src  = (grid->my_row + 1) % grid->q;
-    int dest = (grid->my_row + grid->q - 1) % grid->q;
+    int src  = (grid->my_row + 1) % grid->ppside;
+    int dest = (grid->my_row + grid->ppside - 1) % grid->ppside;
 
     temp_A = matrix_new(n_bar, n_bar);
 
-    for (stage = 0; stage < grid->q; ++stage) {
-        bcast_root = (grid->my_row + stage) % grid->q;
+    for (stage = 0; stage < grid->ppside; ++stage) {
+        bcast_root = (grid->my_row + stage) % grid->ppside;
         if (bcast_root == grid->my_col) {
             MPI_Bcast(local_A, 1, local_matrix_mpi_t, bcast_root, grid->row_comm);
             matrix_multiply(local_A, local_B, local_C, n, n, n);
@@ -76,11 +76,11 @@ void grid_setup(struct grid_info *grid) {
     MPI_Comm_size(MPI_COMM_WORLD, &(grid->nr_world_processes));
     MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
 
-    /* XXX */
-    grid->q = intsqrt(grid->nr_world_processes);
+    /* calcular cuantos procesos por lado tendra la grilla */
+    grid->ppside = intsqrt(grid->nr_world_processes);
 
     /* crear comunicador para topologia de grilla */
-    int dimensions[2]  = {grid->q, grid->q};
+    int dimensions[2]  = {grid->ppside, grid->ppside};
     int wrap_around[2] = {1, 1};
     int reorder = 1;
     MPI_Cart_create(MPI_COMM_WORLD, 2, dimensions, wrap_around, reorder, &(grid->comm));
