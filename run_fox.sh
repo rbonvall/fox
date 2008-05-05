@@ -1,5 +1,5 @@
 #!/bin/sh
-#PBS -l nodes=5:ppn=2
+#PBS -l nodes=2:ppn=4
 
 mpiexec /home/utfsm/rbonvall/fox/fox
 
