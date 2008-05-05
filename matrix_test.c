@@ -16,17 +16,22 @@ int main() {
     B[1][0] =  3;  B[1][1] =  0;  B[1][2] =  1;  B[1][3] =  4;
     B[2][0] =  1;  B[2][1] = -3;  B[2][2] =  2;  B[2][3] =  2;
 
-    matrix_multiply(A, B, C, 2, 3, 4);
-
-    correct = C[0][0] == -26 && C[0][1] ==   9 && C[0][2] ==   7 && C[0][3] == -14 &&
-              C[1][0] ==  29 && C[1][1] ==  -7 && C[1][2] == -14 && C[1][3] ==  10;
+    /* C esta inicializada en cero */
 
     printf("A =\n");
     matrix_print(A, 2, 3);
     printf("B =\n");
     matrix_print(B, 3, 4);
-    printf("C =\n");
+    printf("C before =\n");
     matrix_print(C, 2, 4);
+
+    matrix_multiply_and_add(A, B, C, 2, 3, 4);
+
+    printf("C after =\n");
+    matrix_print(C, 2, 4);
+
+    correct = C[0][0] == -26 && C[0][1] ==   9 && C[0][2] ==   7 && C[0][3] == -14 &&
+              C[1][0] ==  29 && C[1][1] ==  -7 && C[1][2] == -14 && C[1][3] ==  10;
 
     matrix_free(A);
     matrix_free(B);

@@ -19,14 +19,12 @@ void matrix_free(matrix_type **A) {
 }
 
 
-void matrix_multiply(matrix_type **A, matrix_type **B, matrix_type **C, int m, int n, int p) {
+void matrix_multiply_and_add(matrix_type **A, matrix_type **B, matrix_type **C, int m, int n, int p) {
     int i, j, k;
     for (i = 0; i < m; ++i)
-        for (j = 0; j < p; ++j) {
-            C[i][j] = 0;
+        for (j = 0; j < p; ++j)
             for (k = 0; k < n; ++k)
                 C[i][j] += A[i][k] * B[k][j];
-        }
 }
 
 
