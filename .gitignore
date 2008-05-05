@@ -2,3 +2,5 @@
 .*.swp
 matrix_test
 fox
+fox_wrapper.sh.o*
+fox_wrapper.sh.e*
