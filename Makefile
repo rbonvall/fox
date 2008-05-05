@@ -1,7 +1,7 @@
 CC = mpicc
 CCFLAGS = -Wall
 LDFLAGS = -lm
-SCRIPT = run.sh
+SCRIPT = fox_wrapper.sh
 PWD = $(shell pwd)
 
 PROGRAMS = fox
