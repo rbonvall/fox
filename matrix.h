@@ -16,6 +16,10 @@ void matrix_free(matrix_type **A);
 void matrix_multiply(matrix_type **A, matrix_type **B, matrix_type **C,
                      int m, int n, int p);
 
+/* sumar las matrices A y B y poner el resultado en C, todas de m x n */
+void matrix_add(matrix_type **A, matrix_type **B, matrix_type **C,
+                     int m, int n);
+
 /* imprimir la matriz por pantalla */
 void matrix_print(matrix_type **A, int m, int n);
 

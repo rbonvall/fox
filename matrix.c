@@ -30,6 +30,14 @@ void matrix_multiply(matrix_type **A, matrix_type **B, matrix_type **C, int m, i
 }
 
 
+void matrix_add(matrix_type **A, matrix_type **B, matrix_type **C, int m, int n) {
+    int i, j;
+    for (i = 0; i < m; ++i)
+        for (j = 0; j < n; ++j)
+            C[i][j] = A[i][j] + B[i][j];
+}
+
+
 void matrix_print(matrix_type **A, int m, int n) {
     int i, j;
     for (i = 0; i < m; ++i) {
