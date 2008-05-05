@@ -4,7 +4,6 @@
 #include <mpi.h>
 #include "matrix.h"
 
-
 struct grid_info {
     int      nr_world_processes;
     MPI_Comm comm;
@@ -15,6 +14,7 @@ struct grid_info {
 };
 
 void grid_setup(struct grid_info *grid);
+void grid_info_print(struct grid_info *grid);
 void Fox(struct grid_info *grid, int n, 
          matrix_type** local_A, matrix_type** local_B, matrix_type** local_C);
 int intsqrt(int x);
@@ -25,6 +25,9 @@ int main(int argc, char *argv[]) {
 
     MPI_Init(&argc, &argv);
     grid_setup(&grid);
+    grid_info_print(&grid);
+    
+    
 
     /* lado de una submatriz */
     int n;
@@ -105,6 +108,11 @@ void grid_setup(struct grid_info *grid) {
     MPI_Cart_sub(grid->comm, free_coords_for_cols, &(grid->col_comm));
 }
 
+
+void grid_info_print(struct grid_info *grid) {
+    printf("nr_world_processes: %d\n", grid->nr_world_processes);
+    printf("ppside: %d\n", grid->ppside);
+}
 
 int intsqrt(int x) {
     /* TODO: implementacion mas eficiente */
