@@ -7,7 +7,7 @@
 
 struct grid_info {
     int      nr_world_processes;
-    MPI_Comm grid_comm;
+    MPI_Comm comm;
     MPI_Comm row_comm;
     MPI_Comm col_comm;
     int      ppside;
@@ -26,6 +26,20 @@ int main(int argc, char *argv[]) {
     MPI_Init(&argc, &argv);
     grid_setup(&grid);
 
+    /* lado de una submatriz */
+    int n;
+    int local_n = n / grid.ppside;
+
+    matrix_type **local_A, **local_B, **local_C;
+    local_A = matrix_new(local_n, local_n);
+    local_B = matrix_new(local_n, local_n);
+    local_C = matrix_new(local_n, local_n);
+
+    /* TODO: leer matrices */
+
+    Fox(&grid, local_n, local_A, local_B, local_C);
+
+    /* TODO: armar matrices */
 
     MPI_Finalize();
     return 0;
@@ -34,38 +48,30 @@ int main(int argc, char *argv[]) {
 
 
 
-
-void Fox(struct grid_info *grid, int n, 
+/* algoritmo de Fox para multiplicar matrices cuadradas de n x n */
+void Fox(struct grid_info *grid, int local_n, 
          matrix_type** local_A, matrix_type** local_B, matrix_type** local_C)
 {
-    float **temp_A;
     int stage;
+    int i, j;
+    const int local_n_sq = local_n * local_n;
+    const int src  = (grid->my_row + 1) % grid->ppside;
+    const int dest = (grid->my_row + grid->ppside - 1) % grid->ppside;
     int bcast_root;
     MPI_Status status;
-
-    int n_bar = n / grid->ppside;
-
-    int i, j;
-    for (i = 0; i < n; ++i)
-        for (j = 0; j < n; ++j)
-            local_C[i][j] = 0;
-
-    int src  = (grid->my_row + 1) % grid->ppside;
-    int dest = (grid->my_row + grid->ppside - 1) % grid->ppside;
-
-    temp_A = matrix_new(n_bar, n_bar);
+    matrix_type **temp_A = matrix_new(local_n, local_n);
 
     for (stage = 0; stage < grid->ppside; ++stage) {
         bcast_root = (grid->my_row + stage) % grid->ppside;
         if (bcast_root == grid->my_col) {
-            MPI_Bcast(local_A, 1, local_matrix_mpi_t, bcast_root, grid->row_comm);
-            matrix_multiply(local_A, local_B, local_C, n, n, n);
+            MPI_Bcast(local_A, local_n * local_n, MPI_FLOAT, bcast_root, grid->row_comm);
+            matrix_multiply_and_add(local_A, local_B, local_C, local_n, local_n, local_n);
         }
         else {
-            MPI_Bcast(temp_A, 1, local_matrix_mpi_t, bcast_root, grid->row_comm);
-            matrix_multiply(temp_A, local_B, local_C, n, n, n);
+            MPI_Bcast(temp_A,  local_n_sq, MPI_FLOAT, bcast_root, grid->row_comm);
+            matrix_multiply_and_add(temp_A, local_B, local_C, local_n, local_n, local_n);
         }
-        MPI_Sendrecv_replace(local_B, 1, local_matrix_mpi_t, dest, 0, src, 0, grid->col_comm, &status);
+        MPI_Sendrecv_replace(*local_B, local_n_sq, MPI_FLOAT, dest, 0, src, 0, grid->col_comm, &status);
     }
 }
 
@@ -93,8 +99,8 @@ void grid_setup(struct grid_info *grid) {
     grid->my_col = coordinates[1];
 
     /* obtener comunicadores para la fila y la columna del proceso */
-    int free_coords_for_rows[] = {0, 1}
-    int free_coords_for_cols[] = {1, 0}
+    int free_coords_for_rows[] = {0, 1};
+    int free_coords_for_cols[] = {1, 0};
     MPI_Cart_sub(grid->comm, free_coords_for_rows, &(grid->row_comm));
     MPI_Cart_sub(grid->comm, free_coords_for_cols, &(grid->col_comm));
 }
