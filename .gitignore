@@ -1,0 +1,4 @@
+*.o
+.*.swp
+matrix_test
+fox
