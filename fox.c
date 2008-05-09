@@ -24,13 +24,12 @@ int main(int argc, char *argv[]) {
     struct grid_info grid;
 
     MPI_Init(&argc, &argv);
+
     grid_setup(&grid);
     grid_info_print(&grid);
-    
-    
 
     /* lado de una submatriz */
-    int n;
+    int n = 60;
     int local_n = n / grid.ppside;
 
     matrix_type **local_A, **local_B, **local_C;
@@ -38,11 +37,23 @@ int main(int argc, char *argv[]) {
     local_B = matrix_new(local_n, local_n);
     local_C = matrix_new(local_n, local_n);
 
-    /* TODO: leer matrices */
+    /* inicializacion para probar */
+    /* TODO: leer matrices de verdad */
+    int i, j;
+    for (i = 0; i < local_n; ++i)
+        for (j = 0; j < local_n; ++j) {
+            local_A[i][j] =  1.0;
+            local_B[i][j] =  1.0 * (((i + j) % 2) ? -1 : 1);
+        }
 
     Fox(&grid, local_n, local_A, local_B, local_C);
 
     /* TODO: armar matrices */
+
+    for (i = 0; i < local_n; ++i)
+        for (j = 0; j < local_n; ++j) {
+            printf("C[%d,%d] = %f\n", i, j, local_C[i][j]);
+        }
 
     MPI_Finalize();
     return 0;
