@@ -5,16 +5,14 @@ int main() {
     matrix_type **A, **B, **C;
     int correct;
 
-    A = matrix_new(2, 3);
-    B = matrix_new(3, 4);
+    A = matrix_new_from_file(2, 3, "data_matrix_test/A");
+    B = matrix_new_from_file(3, 4, "data_matrix_test/B");
     C = matrix_new(2, 4);
 
-    matrix_set_row(A, 0, 3, (matrix_type[]) { 3, -1, -2});
-    matrix_set_row(A, 1, 3, (matrix_type[]) {-4,  0,  1});
-
-    matrix_set_row(B, 0, 4, (matrix_type[]) {-7,  1,  4, -2});
-    matrix_set_row(B, 1, 4, (matrix_type[]) { 3,  0,  1,  4});
-    matrix_set_row(B, 2, 4, (matrix_type[]) { 1, -3,  2,  2});
+    if (A == NULL || B == NULL) {
+        printf("Error reading files\n");
+        return -1;
+    }
 
     /* C esta inicializada en cero */
 

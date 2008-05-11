@@ -53,3 +53,21 @@ void matrix_set_row(matrix_type **A, int i, int n, matrix_type row[]) {
         A[i][j] = row[j];
 }
 
+
+matrix_type **matrix_new_from_file(int m, int n, char filename[]) {
+    int i, j;
+    matrix_type **A;
+    FILE *data_file;
+
+    data_file = fopen(filename, "r");
+    if (data_file == NULL)
+        return NULL;
+
+    A = matrix_new(m, n);
+    for (i = 0; i < m; ++i)
+        for (j = 0; j < n; ++j) {
+            fscanf(data_file, "%f", &(A[i][j]));
+        }
+
+    return A;
+}

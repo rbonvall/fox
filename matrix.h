@@ -29,4 +29,10 @@ void matrix_print(matrix_type **A, int m, int n);
  * valores en el arreglo row. */
 void matrix_set_row(matrix_type **A, int i, int n, matrix_type row[]); 
 
+
+/* crear una nueva matriz de m x n, y leer sus elementos
+ * del archivo de texto de nombre filename;  si no se puede
+ * leer el archivo, retornar NULL. */
+matrix_type **matrix_new_from_file(int m, int n, char filename[]);
+
 #endif
