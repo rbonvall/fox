@@ -9,12 +9,12 @@ int main() {
     B = matrix_new(3, 4);
     C = matrix_new(2, 4);
 
-    A[0][0] =  3;  A[0][1] = -1;  A[0][2] = -2;
-    A[1][0] = -4;  A[1][1] =  0;  A[1][2] =  1;
+    matrix_set_row(A, 0, 3, (matrix_type[]) { 3, -1, -2});
+    matrix_set_row(A, 1, 3, (matrix_type[]) {-4,  0,  1});
 
-    B[0][0] = -7;  B[0][1] =  1;  B[0][2] =  4;  B[0][3] = -2;
-    B[1][0] =  3;  B[1][1] =  0;  B[1][2] =  1;  B[1][3] =  4;
-    B[2][0] =  1;  B[2][1] = -3;  B[2][2] =  2;  B[2][3] =  2;
+    matrix_set_row(B, 0, 4, (matrix_type[]) {-7,  1,  4, -2});
+    matrix_set_row(B, 1, 4, (matrix_type[]) { 3,  0,  1,  4});
+    matrix_set_row(B, 2, 4, (matrix_type[]) { 1, -3,  2,  2});
 
     /* C esta inicializada en cero */
 

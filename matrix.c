@@ -46,3 +46,10 @@ void matrix_print(matrix_type **A, int m, int n) {
 
 }
 
+
+void matrix_set_row(matrix_type **A, int i, int n, matrix_type row[]) {
+    int j;
+    for (j = 0; j < n; ++j)
+        A[i][j] = row[j];
+}
+

@@ -25,4 +25,8 @@ void matrix_multiply_and_add(matrix_type **A, matrix_type **B, matrix_type **C,
 /* imprimir la matriz por pantalla */
 void matrix_print(matrix_type **A, int m, int n);
 
+/* asignar a la i-esima fila de la matriz A, de n columnas, los
+ * valores en el arreglo row. */
+void matrix_set_row(matrix_type **A, int i, int n, matrix_type row[]); 
+
 #endif
