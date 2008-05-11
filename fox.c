@@ -4,6 +4,8 @@
 #include <mpi.h>
 #include "matrix.h"
 
+enum {FALSE = 0, TRUE = 1};
+
 struct grid_info {
     int      nr_world_processes;
     MPI_Comm comm;
@@ -100,8 +102,8 @@ void grid_setup(struct grid_info *grid) {
 
     /* crear comunicador para topologia de grilla */
     int dimensions[2]  = {grid->ppside, grid->ppside};
-    int wrap_around[2] = {1, 1};
-    int reorder = 1;
+    int wrap_around[2] = {TRUE, TRUE};
+    int reorder = TRUE;
     MPI_Cart_create(MPI_COMM_WORLD, 2, dimensions, wrap_around, reorder, &(grid->comm));
     MPI_Comm_rank(grid->comm, &(grid->my_rank));
 
@@ -112,8 +114,8 @@ void grid_setup(struct grid_info *grid) {
     grid->my_col = coordinates[1];
 
     /* obtener comunicadores para la fila y la columna del proceso */
-    int free_coords_for_rows[] = {0, 1};
-    int free_coords_for_cols[] = {1, 0};
+    int free_coords_for_rows[] = {FALSE, TRUE};
+    int free_coords_for_cols[] = {TRUE, FALSE};
     MPI_Cart_sub(grid->comm, free_coords_for_rows, &(grid->row_comm));
     MPI_Cart_sub(grid->comm, free_coords_for_cols, &(grid->col_comm));
 }
