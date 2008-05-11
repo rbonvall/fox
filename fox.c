@@ -45,17 +45,16 @@ int main(int argc, char *argv[]) {
     for (i = 0; i < local_n; ++i)
         for (j = 0; j < local_n; ++j) {
             local_A[i][j] =  1.0;
-            local_B[i][j] =  1.0 * (((i + j) % 2) ? -1 : 1);
+            local_B[i][j] =  1.0 * ((j % 2) ? -1 : 1);
         }
 
     Fox(&grid, local_n, local_A, local_B, local_C);
 
     /* TODO: armar matrices */
 
-    for (i = 0; i < local_n; ++i)
-        for (j = 0; j < local_n; ++j) {
-            printf("C[%d,%d] = %f\n", i, j, local_C[i][j]);
-        }
+    printf("A =\n"); matrix_print(local_A, local_n, local_n);
+    printf("B =\n"); matrix_print(local_B, local_n, local_n);
+    printf("C =\n"); matrix_print(local_C, local_n, local_n);
 
     MPI_Finalize();
     return 0;
