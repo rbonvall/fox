@@ -1,4 +1,4 @@
-CC = mpicc
+CC = mpicc.mpich-shmem
 CCFLAGS = -Wall
 LDFLAGS = -lm
 SCRIPT = run_fox.sh
