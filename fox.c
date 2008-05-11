@@ -10,7 +10,7 @@ struct grid_info {
     MPI_Comm row_comm;
     MPI_Comm col_comm;
     int      ppside;
-    int      my_row, my_col, my_rank;
+    int      my_row, my_col, my_rank, my_world_rank;
 };
 
 void grid_setup(struct grid_info *grid);
@@ -92,9 +92,8 @@ void Fox(struct grid_info *grid, int local_n,
 
 void grid_setup(struct grid_info *grid) {
     /* obtener datos globales */
-    int world_rank;
     MPI_Comm_size(MPI_COMM_WORLD, &(grid->nr_world_processes));
-    MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
+    MPI_Comm_rank(MPI_COMM_WORLD, &(grid->my_world_rank));
 
     /* calcular cuantos procesos por lado tendra la grilla */
     grid->ppside = intsqrt(grid->nr_world_processes);
