@@ -9,7 +9,7 @@ PROGRAMS = fox
 all: $(PROGRAMS)
 
 clean: rmout
-	-rm -rv $(PROGRAMS) *.o
+	-rm -rv $(PROGRAMS) matrix_test *.o
 rmout:
 	-rm $(SCRIPT).{o,e}*
 
