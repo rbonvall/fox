@@ -4,6 +4,8 @@
 #include <mpi.h>
 #include "matrix.h"
 
+#define DEBUG
+
 enum {FALSE = 0, TRUE = 1};
 
 struct grid_info {
@@ -72,18 +74,54 @@ void Fox(struct grid_info *grid, int local_n,
     MPI_Status status;
     matrix_type **temp_A = matrix_new(local_n, local_n);
 
+#ifdef DEBUG
+    char out_filename[20];
+    sprintf(out_filename, "debug_out_%d_%d", grid->my_row, grid->my_col);
+
+    FILE *debug_out = fopen(out_filename, "w");
+    if (debug_out == NULL) {
+        fprintf(stderr, "Could not open debugging output file\n");
+        exit(-1);
+    }
+#endif
+
+#ifdef DEBUG
+#endif
     for (stage = 0; stage < grid->ppside; ++stage) {
+#ifdef DEBUG
+        fprintf(debug_out, "Entering stage %d\n", stage);
+#endif
         bcast_root = (grid->my_row + stage) % grid->ppside;
         if (bcast_root == grid->my_col) {
+#ifdef DEBUG
+            fprintf(debug_out, "Sending this submatrix across the row:\n");
+            matrix_print(debug_out, local_A, local_n, local_n);
+#endif
             MPI_Bcast(local_A, local_n * local_n, MPI_FLOAT, bcast_root, grid->row_comm);
             matrix_multiply_and_add(local_A, local_B, local_C, local_n, local_n, local_n);
         }
         else {
             MPI_Bcast(temp_A,  local_n_sq, MPI_FLOAT, bcast_root, grid->row_comm);
+#ifdef DEBUG
+            fprintf(debug_out, "Received this matrix from somewhere on the row:\n");
+            matrix_print(debug_out, temp_A, local_n, local_n);
+#endif
             matrix_multiply_and_add(temp_A, local_B, local_C, local_n, local_n, local_n);
         }
+#ifdef DEBUG
+        fprintf(debug_out, "C now is:\n");
+        matrix_print(debug_out, local_C, local_n, local_n);
+#endif
         MPI_Sendrecv_replace(*local_B, local_n_sq, MPI_FLOAT, dest, 0, src, 0, grid->col_comm, &status);
+#ifdef DEBUG
+        fprintf(debug_out, "B now is:\n");
+        matrix_print(debug_out, local_B, local_n, local_n);
+#endif
     }
+
+#ifdef DEBUG
+    fclose(debug_out);
+#endif
 }
 
 
