@@ -75,11 +75,11 @@ void Fox(struct grid_info *grid, int local_n,
     for (stage = 0; stage < grid->ppside; ++stage) {
         bcast_root = (grid->my_row + stage) % grid->ppside;
         if (bcast_root == grid->my_col) {
-            MPI_Bcast(local_A, local_n * local_n, MPI_FLOAT, bcast_root, grid->row_comm);
+            MPI_Bcast(*local_A, local_n * local_n, MPI_FLOAT, bcast_root, grid->row_comm);
             matrix_multiply_and_add(local_A, local_B, local_C, local_n, local_n, local_n);
         }
         else {
-            MPI_Bcast(temp_A,  local_n_sq, MPI_FLOAT, bcast_root, grid->row_comm);
+            MPI_Bcast(*temp_A,  local_n_sq, MPI_FLOAT, bcast_root, grid->row_comm);
             matrix_multiply_and_add(temp_A, local_B, local_C, local_n, local_n, local_n);
         }
         MPI_Sendrecv_replace(*local_B, local_n_sq, MPI_FLOAT, dest, 0, src, 0, grid->col_comm, &status);
