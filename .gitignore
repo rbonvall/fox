@@ -5,3 +5,4 @@ fox
 fox_wrapper.sh.o*
 fox_wrapper.sh.e*
 data_*
+debug_*
