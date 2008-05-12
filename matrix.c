@@ -36,14 +36,13 @@ void matrix_add(matrix_type **A, matrix_type **B, matrix_type **C, int m, int n)
 }
 
 
-void matrix_print(matrix_type **A, int m, int n) {
+void matrix_print(FILE *out_file, matrix_type **A, int m, int n) {
     int i, j;
     for (i = 0; i < m; ++i) {
         for (j = 0; j < n; ++j)
-            printf("\t%g", A[i][j]);
-        printf("\n");
+            fprintf(out_file, "\t%g", A[i][j]);
+        fprintf(out_file, "\n");
     }
-
 }
 
 

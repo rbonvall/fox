@@ -45,11 +45,12 @@ int main(int argc, char *argv[]) {
 
     Fox(&grid, local_n, local_A, local_B, local_C);
 
-    /* TODO: armar matrices */
-
-    printf("A =\n"); matrix_print(local_A, local_n, local_n);
-    printf("B =\n"); matrix_print(local_B, local_n, local_n);
-    printf("C =\n"); matrix_print(local_C, local_n, local_n);
+    printf("A%d%d =\n", grid.my_row, grid.my_col);
+    matrix_print(stdout, local_A, local_n, local_n);
+    printf("B%d%d =\n", grid.my_row, grid.my_col);
+    matrix_print(stdout, local_B, local_n, local_n);
+    printf("C%d%d =\n", grid.my_row, grid.my_col);
+    matrix_print(stdout, local_C, local_n, local_n);
 
     MPI_Finalize();
     return 0;

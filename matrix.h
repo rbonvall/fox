@@ -22,8 +22,9 @@ void matrix_add(matrix_type **A, matrix_type **B, matrix_type **C,
 void matrix_multiply_and_add(matrix_type **A, matrix_type **B, matrix_type **C,
                      int m, int n, int p);
 
-/* imprimir la matriz por pantalla */
-void matrix_print(matrix_type **A, int m, int n);
+/* imprimir la matriz a un archivo;
+ * usar out_file=stdout para imprimir por pantalla */
+void matrix_print(FILE *out_file, matrix_type **A, int m, int n);
 
 /* asignar a la i-esima fila de la matriz A, de n columnas, los
  * valores en el arreglo row. */
