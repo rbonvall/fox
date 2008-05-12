@@ -31,22 +31,17 @@ int main(int argc, char *argv[]) {
     grid_info_print(&grid);
 
     /* lado de una submatriz */
-    int n = 60;
+    int n = 4;
     int local_n = n / grid.ppside;
 
-    matrix_type **local_A, **local_B, **local_C;
-    local_A = matrix_new(local_n, local_n);
-    local_B = matrix_new(local_n, local_n);
-    local_C = matrix_new(local_n, local_n);
+    char A_filename[50], B_filename[50];
+    sprintf(A_filename, "data_localn2_side2/A_localn2_row%d_col%d", grid.my_row, grid.my_col);
+    sprintf(B_filename, "data_localn2_side2/B_localn2_row%d_col%d", grid.my_row, grid.my_col);
 
-    /* inicializacion para probar */
-    /* TODO: leer matrices de verdad */
-    int i, j;
-    for (i = 0; i < local_n; ++i)
-        for (j = 0; j < local_n; ++j) {
-            local_A[i][j] =  1.0;
-            local_B[i][j] =  1.0 * ((j % 2) ? -1 : 1);
-        }
+    matrix_type **local_A, **local_B, **local_C;
+    local_A = matrix_new_from_file(local_n, local_n, A_filename);
+    local_B = matrix_new_from_file(local_n, local_n, B_filename);
+    local_C = matrix_new(local_n, local_n);
 
     Fox(&grid, local_n, local_A, local_B, local_C);
 
