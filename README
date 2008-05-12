@@ -1,0 +1,7 @@
+Implementation of Fox' algorithm for matrix multiplication.
+Based on chapter 7 of Pacheco's _Parallel Programming with MPI_.
+
+TODO: file descriptions and algorithm explanation.
+
+Roberto Bonvallet <rbonvall@gmail.com>
+
